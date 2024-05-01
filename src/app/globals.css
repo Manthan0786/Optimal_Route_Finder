@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0 0 0;
+  --background-start-rgb: 248 250 252;
+  --background-end-rgb: 248 250 252;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --foreground-rgb: 0 0 0;
+    --background-start-rgb: 0 0 0;
+    --background-end-rgb: 0 0 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.content-section {
+  max-height: 500px;
+  overflow-y: hidden;
+
+  transition-property: all;
+	transition-duration: .5s;
+	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
