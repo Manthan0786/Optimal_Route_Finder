@@ -1,4 +1,4 @@
-import { TextField, Button } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
@@ -17,21 +17,36 @@ function RouteFinder() {
   };
 
   const handleSubmit = async () => {
-    if (result !== null && result.length > 0) {
+    const isArrayEmpty = (addresses: string[]) => {
+      return addresses.every((item) => item === "");
+    };
+    if (isArrayEmpty(addresses)) {
+      alert("Enter addresses");
       return;
     }
+    setResult([]);
     setLoading(true);
     const res = await FindOptimalRoute(addresses);
-    setResult(res);
-    setLoading(false);
+    if (res) {
+      setResult(res);
+      setLoading(false);
+      setAddresses(["", ""]);
+    }
   };
+
   const handleAdd = () => {
     setAddresses([...addresses, ""]);
   };
+
   const handleOpenNew = () => {
     const joinedAddresses = result.join("+");
     const mapsURL = `https://www.google.com/maps/search/?api=1&query=${joinedAddresses}`;
     window.open(mapsURL);
+  };
+
+  const handleClear = () => {
+    setAddresses(["", ""]);
+    setResult([]);
   };
 
   return (
@@ -54,7 +69,7 @@ function RouteFinder() {
       </div>
       <div className="flex gap-4 justify-center mt-4">
         <button
-          className="p-1 rounded-md border-2 border-slate-600 "
+          className="p-1 rounded-md border-2 border-slate-600"
           onClick={handleSubmit}
         >
           Submit
@@ -65,13 +80,19 @@ function RouteFinder() {
         >
           Open in New Window
         </button>
+        <button
+          className="p-1 rounded-md border-2 border-slate-600"
+          onClick={handleClear}
+        >
+          Clear
+        </button>
       </div>
       {loading && (
         <Box sx={{ width: 300 }}>
           <Skeleton animation="wave" />
         </Box>
       )}
-      {result && result.map((res) => <div key={res}>{res}</div>)}
+      {result && result.map((res, index) => <div key={index}>{res}</div>)}
     </section>
   );
 }
